@@ -4,7 +4,6 @@ jquery.loadmodal.js
 
 Author: Conan C. Albrecht <ca@byu.edu>
 License: MIT
-Version: 1.1 (Feb 2014)
 
 Dependencies: 
   - JQuery 1.5+
