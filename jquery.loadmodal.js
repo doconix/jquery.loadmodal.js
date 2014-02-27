@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.3 (Feb 2014)
+    Version: 1.1.4 (Feb 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -22,7 +22,7 @@
 
     Advanced example:
 
-        $('#someid').loadmodal(
+        $('#someid').loadmodal({
           url: '/your/server/url',
           id: 'custom_modal_id',
           title: 'My Title',
