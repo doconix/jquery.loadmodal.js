@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.5 (Feb 2014)
+    Version: 1.1.6 (Feb 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -18,18 +18,18 @@
 
     Simple example: 
 
-        $('#someid').loadmodal('/your/server/url/');
+        $('body').loadmodal('/your/server/url/');
 
     Advanced example:
 
-        $('#someid').loadmodal({
+        $('body').loadmodal({
           url: '/your/server/url',
           id: 'custom_modal_id',
           title: 'My Title',
           width: '400px',
           ajax: {
             dataType: 'html',
-            method: 'POST',
+            method: 'GET',
             success: function(data, status, xhr) {
               console.log($('#custom_modal_id'));
             },//
@@ -39,7 +39,7 @@
 
     Closing a dialog: (this is standard bootstrap)
         
-        $('#someid').modal('hide'); 
+        $('body').modal('hide'); 
 
 
 */
