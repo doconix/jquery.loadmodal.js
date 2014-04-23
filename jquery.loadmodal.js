@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.6 (Feb 2014)
+    Version: 1.1.7 (April 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -44,7 +44,7 @@
 
 */
 (function($) {
-
+  
 	$.fn.loadmodal = function(options) {
 
     // get the first item from the array as the element we'll work on
@@ -61,7 +61,7 @@
     }//if
     
     // set the default options
-    options = $.extend({
+    options = $.extend(true, {
       url: null,                               // a convenience place to specify the url - this is moved into ajax.url
       
       id: 'jquery-loadmodal-js',               // the id of the modal
@@ -86,8 +86,8 @@
     $('#' + options.id).modal('hide');
     
     // create our own success responder for the ajax
-    var orig_success = options.ajax.success;
-    options.ajax.success = function(data, status, xhr) {
+    options.ajax.success = $.isArray(options.ajax.success) ? options.ajax.success : options.ajax.success ? [ options.ajax.success ] : [];
+    options.ajax.success.unshift(function(data, status, xhr) {
       // create the modal html
       var div = $([
         '<div id="' + options.id + '" class="modal fade">',
@@ -114,13 +114,7 @@
       div.on('hidden.bs.modal', function (e) {
         div.remove();
       });
-
-      // run the user success function, if there is one
-      if (orig_success) {
-        orig_success(data, status, xhr);
-      }//if
-      
-    }//success
+    });//unshift (add success method)
     
     // load the content from the server
     $.ajax(options.ajax);
