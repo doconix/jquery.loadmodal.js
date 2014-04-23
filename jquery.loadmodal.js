@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.8 (April 2014)
+    Version: 1.1.9 (April 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -41,6 +41,10 @@
               console.log($('#custom_modal_id'));
             },//
             // any other options from the regular $.ajax call (see JQuery docs)
+          },
+          onShow: function(dlg) {
+            console.log('The dialog just showed on the screen!');
+            console.log(dlg);
           },
         });
 
@@ -90,6 +94,10 @@
         url: null,                             // required (for convenience, you can specify url above instead)
       },//ajax
       
+      onShow: false,                           // if set, this function will be called with a reference to the dialog once it has been
+                                               // successfully shown.  You can also listen for modal events, but be aware that show.bs.modal
+                                               // triggers *before* the content is added to .modal-body.
+      
     }, options);  
     
       
@@ -131,6 +139,12 @@ options.closeButton ? '          <button class="close" data-dismiss="modal" type
       div.on('hidden.bs.modal', function (e) {
         div.remove();
       });
+      
+      // call the onShow function if there is one
+      if (options.onShow) {
+        options.onShow(dlg);
+      }//if
+      
     });//unshift (add success method)
     
     // load the content from the server
