@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.7 (April 2014)
+    Version: 1.1.8 (April 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -15,6 +15,8 @@
       - Bootstrap (tested against v3)
 
     A JQuery plugin to open a Bootstrap modal (dialog) with content loaded via Ajax.
+    You can do this with standard Bootstrap, but this plugin makes it easier.  It
+    does the <div> structure for you, loads the content, and opens the dialog.
 
     Simple example: 
 
@@ -27,6 +29,11 @@
           id: 'custom_modal_id',
           title: 'My Title',
           width: '400px',
+          closeButton: false,
+          modal: {
+            keyboard: false,
+            // any other options from the regular $().modal call (see Bootstrap docs)
+          },
           ajax: {
             dataType: 'html',
             method: 'GET',
@@ -70,11 +77,21 @@
       
       width: '400px',                          // 20%, 400px, or other css width
       
-      ajax: {                                  // options sent into $.ajax (see JQuery docs for .ajax for the options)
+      dlgClass: 'fade',                        // CSS class(es) to add to the <div class="modal"> main dialog element.  This default makes the dialog fade in.
+      
+      size: 'modal-lg',                        // CSS class(es) to specify the dialog size ('modal-lg', 'modal-sm', '').  The default creates a large dialog.  See the Bootstrap docs for more info.
+      
+      closeButton: true,                       // whether to have an 'X' button at top right to close the dialog
+      
+      modal: {                                 // options sent into $().modal (see Bootstrap docs for .modal and its options)
+      },//modal
+      
+      ajax: {                                  // options sent into $.ajax (see JQuery docs for .ajax and its options)
         url: null,                             // required (for convenience, you can specify url above instead)
       },//ajax
       
     }, options);  
+    
       
     // ensure we have a url
     options.ajax.url = options.ajax.url || options.url;
@@ -90,24 +107,24 @@
     options.ajax.success.unshift(function(data, status, xhr) {
       // create the modal html
       var div = $([
-        '<div id="' + options.id + '" class="modal fade">',
-        '  <div class="modal-dialog modal-lg">',
-        '      <div class="modal-content">',
-        '        <div class="modal-header">',
-        '          <button class="close" data-dismiss="modal" type="button">x</button>',
-        '          <h4 class="modal-title">' + options.title + '</h4>',
-        '        </div>',
-        '        <div class="modal-body">',
-        '        </div>',
-        '      </div>',
-        '    </div>',
-        '  </div>',
+                      '<div id="' + options.id + '" class="modal ' + options.dlgClass + '">',
+                      '  <div class="modal-dialog ' + options.size + '">',
+                      '      <div class="modal-content">',
+                      '        <div class="modal-header">',
+options.closeButton ? '          <button class="close" data-dismiss="modal" type="button">x</button>' : '',
+                      '          <h4 class="modal-title">' + options.title + '</h4>',
+                      '        </div>',
+                      '        <div class="modal-body">',
+                      '        </div>',
+                      '      </div>',
+                      '    </div>',
+                      '  </div>',
       ].join('\n'));
       
       // add the new modal div to the element and show it!
       elem.after(div);
       div.find('.modal-body').html(data);
-      div.modal();
+      div.modal(options.modal);
       div.find('.modal-dialog').css('width', options.width);
 
       // event to remove the content on close
