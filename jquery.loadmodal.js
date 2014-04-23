@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.9 (April 2014)
+    Version: 1.1.10 (April 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -20,13 +20,13 @@
 
     Simple example: 
 
-        $('body').loadmodal('/your/server/url/');
+        $.loadmodal('/your/server/url/');
 
     Advanced example:
 
-        $('body').loadmodal({
+        $.loadmodal({
           url: '/your/server/url',
-          id: 'custom_modal_id',
+          id: 'my-modal-id',
           title: 'My Title',
           width: '400px',
           closeButton: false,
@@ -50,19 +50,13 @@
 
     Closing a dialog: (this is standard bootstrap)
         
-        $('body').modal('hide'); 
+        $('#my-modal-id').modal('hide'); 
 
 
 */
 (function($) {
   
-	$.fn.loadmodal = function(options) {
-
-    // get the first item from the array as the element we'll work on
-    var elem = this.first();
-    if (elem.length == 0) {
-      return;
-    }//if
+	$.loadmodal = function(options) {
 
     // allow a simple url to be sent as the single option
     if ($.type(options) == 'string') {
@@ -76,6 +70,8 @@
       url: null,                               // a convenience place to specify the url - this is moved into ajax.url
       
       id: 'jquery-loadmodal-js',               // the id of the modal
+      
+      appendToSelector: 'body',                // the element to append the dialog <div> code to.  Normally, this should be left as the 'body' element.
       
       title: window.document.title || 'Dialog',// the title of the dialog
       
@@ -129,8 +125,8 @@ options.closeButton ? '          <button class="close" data-dismiss="modal" type
                       '  </div>',
       ].join('\n'));
       
-      // add the new modal div to the element and show it!
-      elem.after(div);
+      // add the new modal div to the body and show it!
+      $(options.appendToSelector).append(div);
       div.find('.modal-body').html(data);
       div.modal(options.modal);
       div.find('.modal-dialog').css('width', options.width);
@@ -142,7 +138,7 @@ options.closeButton ? '          <button class="close" data-dismiss="modal" type
       
       // call the onShow function if there is one
       if (options.onShow) {
-        options.onShow(dlg);
+        options.onShow(div);
       }//if
       
     });//unshift (add success method)
@@ -150,9 +146,7 @@ options.closeButton ? '          <button class="close" data-dismiss="modal" type
     // load the content from the server
     $.ajax(options.ajax);
     
-    // return this to allow chaining
-    return this;
-  };//setTimer function
+  };//loadmodal top-level function
   
 })(jQuery);
 
