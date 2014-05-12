@@ -1,13 +1,13 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.10 (April 2014)
+    Version: 1.1.11 (April 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.10
+        git tag 1.1.11
         git push origin --tags
 
     Dependencies: 
@@ -71,6 +71,8 @@
       
       id: 'jquery-loadmodal-js',               // the id of the modal
       
+      idBody: 'jquery-loadmodal-js-body',      // the id of the modal-body (the dialog content)
+      
       appendToSelector: 'body',                // the element to append the dialog <div> code to.  Normally, this should be left as the 'body' element.
       
       title: window.document.title || 'Dialog',// the title of the dialog
@@ -118,7 +120,7 @@
 options.closeButton ? '          <button class="close" data-dismiss="modal" type="button">x</button>' : '',
                       '          <h4 class="modal-title">' + options.title + '</h4>',
                       '        </div>',
-                      '        <div class="modal-body">',
+                      '        <div id="' + options.idBody + '" class="modal-body">',
                       '        </div>',
                       '      </div>',
                       '    </div>',
