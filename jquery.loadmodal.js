@@ -1,13 +1,13 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.11 (April 2014)
+    Version: 1.1.12 (June 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.11
+        git tag 1.1.12
         git push origin --tags
 
     Dependencies: 
@@ -30,6 +30,13 @@
           title: 'My Title',
           width: '400px',
           closeButton: false,
+          buttons: {
+            "OK": function() {
+              // do something here
+              // a false return here cancels the automatic closing of the dialog
+            },  
+            "Cancel": false,   // no-op - just having the option makes the dialog close
+          },
           modal: {
             keyboard: false,
             // any other options from the regular $().modal call (see Bootstrap docs)
@@ -85,6 +92,9 @@
       
       closeButton: true,                       // whether to have an 'X' button at top right to close the dialog
       
+      buttons: {                               // set titles->functions to add buttons to the bottom of the dialog
+      },//buttons                              // return false from the function to prevent the automatic closing of the dialog
+             
       modal: {                                 // options sent into $().modal (see Bootstrap docs for .modal and its options)
       },//modal
       
@@ -113,7 +123,7 @@
     options.ajax.success.unshift(function(data, status, xhr) {
       // create the modal html
       var div = $([
-                      '<div id="' + options.id + '" class="modal ' + options.dlgClass + '">',
+                      '<div id="' + options.id + '" class="modal ' + options.dlgClass + ' jquery-loadmodal-js">',
                       '  <div class="modal-dialog ' + options.size + '">',
                       '      <div class="modal-content">',
                       '        <div class="modal-header">',
@@ -132,6 +142,26 @@ options.closeButton ? '          <button class="close" data-dismiss="modal" type
       div.find('.modal-body').html(data);
       div.modal(options.modal);
       div.find('.modal-dialog').css('width', options.width);
+      
+      // add buttons to the dialog, if any
+      if (!$.isEmptyObject(options.buttons)) {
+        div.find('.modal-body').append('<div class="button-panel"></div>');
+        var button_class = 'btn btn-primary';
+        $.each(options.buttons, function(key, func) {
+          var button = $('<button class="' + button_class + '">' + key + '</button>');
+          div.find('.button-panel').append(button);
+          button.on('click.button-panel', function(evt) {
+            var closeDialog = true; // any button closes the dialog
+            if (func && func(evt) === false) {  // run the callback
+              closeDialog = false; // an explicit false returned from the callback stops the dialog close
+            }//if
+            if (closeDialog) {
+              div.modal('hide');
+            }//if
+          });//click
+          button_class = 'btn btn-default';  // only the first is the primary
+        });//each
+      }//if
 
       // event to remove the content on close
       div.on('hidden.bs.modal', function (e) {
