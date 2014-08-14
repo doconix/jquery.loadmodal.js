@@ -12,6 +12,10 @@ Dependencies:
 
 
 A JQuery plugin to open a Bootstrap modal (dialog) with content loaded via Ajax.
+Normally, Bootstrap requires that you manually create the dialog <div>s before
+loading content into it.  This plugin creates the modal divs for you and makes
+it easier to call dialogs directly from Javascript without any corresponding
+HTML.
 
 
 Simple example: 

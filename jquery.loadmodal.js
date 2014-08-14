@@ -1,13 +1,13 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.12 (June 2014)
+    Version: 1.1.13 (June 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.12
+        git tag 1.1.13
         git push origin --tags
 
     Dependencies: 
@@ -102,7 +102,12 @@
         url: null,                             // required (for convenience, you can specify url above instead)
       },//ajax
       
-      onShow: false,                           // if set, this function will be called with a reference to the dialog once it has been
+      beforeShow: null,                        // This method is called at the beginning of the default success method.  If this method 
+                                               // returns false (an explicit false), the default success method is canceled and not run.  You can also define 
+                                               // normal ajax success methods in the ajax options above, but these are called *after* the
+                                               // modal is shown.  This method allows you to handle the response before the modal is called.
+      
+      onShow: null,                            // if set, this function will be called with a reference to the dialog once it has been
                                                // successfully shown.  You can also listen for modal events, but be aware that show.bs.modal
                                                // triggers *before* the content is added to .modal-body.
       
@@ -120,7 +125,12 @@
     
     // create our own success responder for the ajax
     options.ajax.success = $.isArray(options.ajax.success) ? options.ajax.success : options.ajax.success ? [ options.ajax.success ] : [];
-    options.ajax.success.unshift(function(data, status, xhr) {
+    options.ajax.success.unshift(function(data, status, xhr) { // unshift puts this as the first success method
+      // call the beforeShow method if there is one, and cancel if it returns false
+      if (options.beforeShow && options.beforeShow(data, status, xhr) === false) {
+        return;
+      }//if
+      
       // create the modal html
       var div = $([
                       '<div id="' + options.id + '" class="modal ' + options.dlgClass + ' jquery-loadmodal-js">',
