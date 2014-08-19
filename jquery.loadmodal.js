@@ -1,13 +1,13 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.13 (June 2014)
+    Version: 1.1.14 (June 2014)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.13
+        git tag 1.1.14
         git push origin --tags
 
     Dependencies: 
@@ -175,6 +175,7 @@ options.closeButton ? '          <button class="close" data-dismiss="modal" type
 
       // event to remove the content on close
       div.on('hidden.bs.modal', function (e) {
+        div.removeData();
         div.remove();
       });
       
