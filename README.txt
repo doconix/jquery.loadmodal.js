@@ -20,12 +20,12 @@ HTML.
 
 Simple example: 
 
-        $('#someid').loadmodal('/your/server/url/');
+        $.loadmodal('/your/server/url/');
 
 
 Advanced example:
 
-        $('#someid').loadmodal({
+        $.loadmodal({
           url: '/your/server/url',
           id: 'custom_modal_id',
           title: 'My Title',
@@ -43,4 +43,4 @@ Advanced example:
 
 Closing a dialog: (this is standard bootstrap)
     
-        $('#someid').modal('hide'); 
+        $('#custom_modal_id').modal('hide'); 

@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.14 (June 2014)
+    Version: 1.1.15 (Feb 2015)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
