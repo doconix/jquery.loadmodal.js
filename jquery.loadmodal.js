@@ -1,13 +1,13 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.17 (June 2016)
+    Version: 1.1.18 (June 2016)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.17
+        git tag 1.1.18
         git push origin --tags
 
     Dependencies:
@@ -164,7 +164,7 @@
             // create the modal html
             var div = $([
                         '<div id="' + options.id + '" class="modal ' + options.dlgClass + ' jquery-loadmodal-js">',
-                        '  <div class="modal-dialog ' + options.size + '">',
+                        '  <div class="modal-dialog ' + options.size + '" role="document">', // role is for accessibility
                         '      <div class="modal-content">',
                         '        <div class="modal-header">',
   options.closeButton ? '          <button class="close" data-dismiss="modal" type="button">x</button>' : '',
