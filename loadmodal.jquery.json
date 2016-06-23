@@ -7,7 +7,7 @@
         "modal",
         "dialog"
     ],
-    "version": "1.1.16",
+    "version": "1.1.17",
     "author": {
         "name": "Conan Albrecht",
         "url": "http://warp.byu.edu/",
@@ -16,7 +16,6 @@
     "licenses": [
         {
             "type": "MIT",
-            "url": "https://github.com/jquery/jquery-color/blob/2.1.2/MIT-LICENSE.txt"
         }
     ],
     "dependencies": {
