@@ -1,13 +1,13 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.19 (July 2016)
+    Version: 1.1.21 (July 2016)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.19
+        git tag 1.1.21
         git push origin --tags
 
     Dependencies:
@@ -83,7 +83,10 @@
 
             idBody: 'jquery-loadmodal-js-body',                 // the id of the modal-body (the dialog content)
 
-            appendToSelector: 'body',                           // the element to append the dialog <div> code to.  Normally, this should be left as the 'body' element.
+            prependToSelector: null,                            // force the modal to be prepended to this selector.
+            appendToSelector: null,                             // force the modal to be appended to this selector.
+                                                                // If both are null (the default), the modal is prepended to the body element.  This is usually preferred because
+                                                                // it allows keyboard navigation to go directly from the browser controls to the modal's tabbable elements.
 
             title: window.document.title || 'Dialog',           // the title of the dialog
 
@@ -162,8 +165,9 @@
             }//for
 
             // create the modal html
+            // the tabindex="0" is to allow bootstrap's enforceFocus method to keep the focus inside the dialog when keyboard navigation is used
             var div = $([
-                        '<div id="' + options.id + '" class="modal ' + options.dlgClass + ' jquery-loadmodal-js" role="dialog" aria-labeledby="' + options.id + '-title">',
+                        '<div id="' + options.id + '" class="modal ' + options.dlgClass + ' jquery-loadmodal-js" tabindex="0" role="dialog" aria-labeledby="' + options.id + '-title">',
                         '  <div class="modal-dialog ' + options.size + '" role="document">',
                         '      <div class="modal-content">',
                         '        <div class="modal-header">',
@@ -178,7 +182,11 @@
             ].join('\n'));
 
             // add the new modal div to the body
-            $(options.appendToSelector).append(div);
+            if (options.appendToSelector && !options.prependToSelector) {
+                $(options.appendToSelector).append(div);
+            }else{
+                $(options.prependToSelector || 'body').prepend(div);
+            }//if
             div.find('.modal-body').html(data);
             div.find('.modal-dialog').css('width', options.width);
 
