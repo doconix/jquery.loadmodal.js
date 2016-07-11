@@ -1,13 +1,13 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.18 (June 2016)
+    Version: 1.1.19 (July 2016)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.18
+        git tag 1.1.19
         git push origin --tags
 
     Dependencies:
@@ -163,12 +163,12 @@
 
             // create the modal html
             var div = $([
-                        '<div id="' + options.id + '" class="modal ' + options.dlgClass + ' jquery-loadmodal-js">',
-                        '  <div class="modal-dialog ' + options.size + '" role="document">', // role is for accessibility
+                        '<div id="' + options.id + '" class="modal ' + options.dlgClass + ' jquery-loadmodal-js" role="dialog" aria-labeledby="' + options.id + '-title">',
+                        '  <div class="modal-dialog ' + options.size + '" role="document">',
                         '      <div class="modal-content">',
                         '        <div class="modal-header">',
   options.closeButton ? '          <button class="close" data-dismiss="modal" type="button">x</button>' : '',
-                        '          <h4 class="modal-title">' + options.title + '</h4>',
+                        '          <h4 id="' + options.id + '-title" class="modal-title">' + options.title + '</h4>',
                         '        </div>',
                         '        <div id="' + options.idBody + '" class="modal-body">',
                         '        </div>',
@@ -208,6 +208,20 @@
                     return false;
                 } //if
             } //for
+
+            // add a callback to set the focus to the first selectable element within the dialog
+            div.on('shown.bs.modal', function(event) {
+                // do we have an autofocus element?
+                if (div.find('[autofocus]').length > 0) {
+                    div.find('[autofocus]').get(0).focus();
+                // do we have any tabbable elements in the dialog content area?
+                }else if (div.find('.modal-body').find(':tabbable').length > 0) {
+                    div.find('.modal-body').find(':tabbable').get(0).focus();
+                // do we have a close button?
+                }else if (options.CloseButton) {
+                    div.find('.close').get(0).focus();
+                }//if
+            }); //shown
 
             // add a callback to the onshow methods once the dialog shows (this doesn't run now)
             div.on('shown.bs.modal', function(event) {
