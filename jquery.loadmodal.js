@@ -7,7 +7,7 @@
         Change the version number in all the files.
         git commit -am 'message'
         git push origin master
-        git tag 1.1.21
+        git tag 1.1.22
         git push origin --tags
 
     Dependencies:
