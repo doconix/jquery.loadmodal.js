@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.21 (July 2016)
+    Version: 1.1.22 (March 2017)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -223,8 +223,8 @@
                 if (div.find('[autofocus]').length > 0) {
                     div.find('[autofocus]').get(0).focus();
                 // do we have any tabbable elements in the dialog content area?
-                }else if (div.find('.modal-body').find(':tabbable').length > 0) {
-                    div.find('.modal-body').find(':tabbable').get(0).focus();
+                }else if (div.find('.modal-body').find(':input:enabled:visible').length > 0) {
+                    div.find('.modal-body').find(':input:enabled:visible').get(0).focus();
                 // do we have a close button?
                 }else if (options.CloseButton) {
                     div.find('.close').get(0).focus();
