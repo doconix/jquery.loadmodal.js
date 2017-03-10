@@ -5,10 +5,10 @@ jquery.loadmodal.js
 Author: Conan C. Albrecht <ca@byu.edu>
 License: MIT
 
-Dependencies: 
+Dependencies:
 
-        - JQuery 1.5+
-        - Bootstrap (tested against v3)
+        - JQuery 1.7+
+        - Bootstrap 3
 
 
 A JQuery plugin to open a Bootstrap modal (dialog) with content loaded via Ajax.
@@ -18,7 +18,7 @@ it easier to call dialogs directly from Javascript without any corresponding
 HTML.
 
 
-Simple example: 
+Simple example:
 
         $.loadmodal('/your/server/url/');
 
@@ -27,20 +27,41 @@ Advanced example:
 
         $.loadmodal({
           url: '/your/server/url',
-          id: 'custom_modal_id',
+          id: 'my-modal-id',
           title: 'My Title',
           width: '400px',
+          closeButton: false,
+          buttons: {
+            "OK": function() {
+              // do something here
+              // a false return here cancels the automatic closing of the dialog
+            },
+            "Cancel": false,   // no-op - just having the option makes the dialog close
+          },
+          modal: {
+            keyboard: false,
+            // any other options from the regular $().modal call (see Bootstrap docs)
+          },
           ajax: {
             dataType: 'html',
-            method: 'POST',
-            success: function(data, status, xhr) {
-              console.log($('#custom_modal_id'));
-            },//
+            method: 'GET',
             // any other options from the regular $.ajax call (see JQuery docs)
           },
+
+        }).done(function(data) {
+            console.log('Ajax response is here!');
+
+        }).create(function(event) {
+            console.log('Modal is created but not yet visible,')
+
+        }).show(function(event) {
+            console.log('Modal is now showing.')
+
+        }).close(function(event) {
+            console.log('Modal just closed!')
         });
 
 
 Closing a dialog: (this is standard bootstrap)
-    
-        $('#custom_modal_id').modal('hide'); 
+
+        $('#custom_modal_id').modal('hide');

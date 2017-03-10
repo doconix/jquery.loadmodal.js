@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.22 (March 2017)
+    Version: 1.1.23 (March 2017)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -44,15 +44,20 @@
           ajax: {
             dataType: 'html',
             method: 'GET',
-            success: function(data, status, xhr) {
-              console.log($('#custom_modal_id'));
-            },//
             // any other options from the regular $.ajax call (see JQuery docs)
           },
-          onShow: function(dlg) {
-            console.log('The dialog just showed on the screen!');
-            console.log(dlg);
-          },
+
+        }).done(function(data) {
+            console.log('Ajax response is here!');
+
+        }).create(function(event) {
+            console.log('Modal is created but not yet visible,')
+
+        }).show(function(event) {
+            console.log('Modal is now showing.')
+
+        }).close(function(event) {
+            console.log('Modal just closed!')
         });
 
     Closing a dialog: (this is standard bootstrap)
@@ -115,26 +120,41 @@
                                                                 // the content of the return.
                                                                 // The arguments are the ones returned from $.ajax: data, status, xhr.
                                                                 // This can be a single callback or an array of callbacks.
+                                                                // Note you can also use promise-style syntax with the Ajax promise object:
+                                                                //      $.loadmodal('url').done(function(data, status, xhr) {
+                                                                //          console.log(this);
+                                                                //      });
 
             onCreate: null,                                     // This method is called after the dialog is created by not yet shown.  This allows
                                                                 // you to adjust the dialog before it shows.
                                                                 // The arguments are the ones returned from $.ajax: data, status, xhr, and "this" is the dialog element.
                                                                 // This can be a single callback or an array of callbacks.
+                                                                // Note you can also use promise-style syntax with:
+                                                                //      $.loadmodal('url').create(function(data, status, xhr) {
+                                                                //          console.log(this);
+                                                                //      });
 
             onShow: null,                                       // if set, this function will be called with a reference to the dialog once it has been
                                                                 // successfully shown.
                                                                 // The arguments are the ones sent to the shown event: event, and "this" is the dialog element.
                                                                 // This can be a single callback or an array of callbacks.
                                                                 // This is a convenience option - you could also use the Boostrap bs.modal.shown event.
+                                                                // Note you can also use promise-style syntax with:
+                                                                //      $.loadmodal('url').show(function(event) {
+                                                                //          console.log(this);
+                                                                //      });
 
             onClose: null,                                      // if set, this function will be called with a reference to the dialog upon close/hide,
                                                                 // just before the dialog elements are removed from the DOM.
-                                                                // The callback has no arguments, and it sets "this" to the dialog element.
+                                                                // The arguments are the ones sent to the hide event: event, and "this" is the dialog element.
                                                                 // This can be a single callback or an array of callbacks.
                                                                 // This is a convenience option - you could also use the Boostrap bs.modal.hide event.
+                                                                // Note you can also use promise-style syntax with:
+                                                                //      $.loadmodal('url').close(function(event) {
+                                                                //          console.log(this);
+                                                                //      });
 
         }, options);
-
 
         // ensure we have a url
         options.ajax.url = options.ajax.url || options.url;
@@ -231,14 +251,14 @@
                 }//if
             }); //shown
 
-            // add a callback to the onshow methods once the dialog shows (this doesn't run now)
+            // add a callback to the onshow methods once the dialog shows
             div.on('shown.bs.modal', function(event) {
                 for (var i = 0; i < options.onShow.length; i++) {
                     options.onShow[i].apply(div.get(0), [ event ]);
                 } //for
             }); //shown
 
-            // event to remove the content on close (this doesn't run now)
+            // event to remove the content on close
             div.on('hidden.bs.modal', function(event) {
                 // trigger the callbacks
                 for (var i = 0; i < options.onClose.length; i++) {
@@ -256,7 +276,26 @@
         }); //unshift (add success method)
 
         // load the content from the server
-        $.ajax(options.ajax);
+        var promise = $.ajax(options.ajax);
+
+        // add some extra methods to the promise object
+        $.extend(promise, {
+            create: function(func) {
+                options.onCreate.push(func);
+                return this;
+            },//create
+            show: function(func) {
+                options.onShow.push(func);
+                return this;
+            },//show
+            close: function(func) {
+                options.onClose.push(func);
+                return this;
+            },//close
+        });//extend
+
+        // return the promise
+        return promise;
 
     }; //loadmodal top-level function
 
