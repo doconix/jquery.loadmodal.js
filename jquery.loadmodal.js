@@ -1,7 +1,7 @@
 /*
     Author: Conan C. Albrecht <ca@byu.edu>
     License: MIT
-    Version: 1.1.23 (March 2017)
+    Version: 1.1.24 (April 2017)
 
     Reminder on how to publish to GitHub:
         Change the version number in all the files.
@@ -230,12 +230,20 @@
                 }); //each
             } //if
 
+            // adjust the z-index to be greater than other modals (this ensures it opens in front of any other modals)
+            var zmax = parseInt(div.css("z-index"));
+            $(".modal:visible").each(function(i, elem) {
+                zmax = Math.max(zmax, parseInt($(elem).css("z-index")));
+            });
+            div.css('z-index', zmax + 10);
+
             // trigger the onCreate callbacks
             for (var i = 0; i < options.onCreate.length; i++) {
                 if (options.onCreate[i].apply(div.get(0), [ data, status, xhr ]) === false) {
                     return false;
                 } //if
             } //for
+
 
             // add a callback to set the focus to the first selectable element within the dialog
             div.on('shown.bs.modal', function(event) {
@@ -269,6 +277,11 @@
                 div.removeData();
                 div.remove();
             });//hidden
+
+            // only show the backdrop on the first modal open (keeps it from going darker and darker in multiple modals, which should probably be avoided anyway)
+            if (options.modal.backdrop !== false && options.modal.backdrop !== true) {
+                options.modal.backdrop = $('.modal-backdrop:visible').length == 0;
+            }//if
 
             // finally, show the dialog!
             div.modal(options.modal);
